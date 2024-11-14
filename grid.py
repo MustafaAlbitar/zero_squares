@@ -2,6 +2,7 @@ import numpy as np
 from square import *
 from goal import *
 from gui import *
+from prediction import *
 
 class Grid():
     def __init__(self):
@@ -28,6 +29,10 @@ class Grid():
         gui.drawGoals(canvas,goals)
         gui.drawSquares(canvas,squares)
         
+        predictions = Predictions(squares, goals,board)
+        predictions.BFS()
+        predictions.DFS()
+        
         return board,squares,goals
     
     
@@ -47,6 +52,10 @@ class Grid():
         gui.drawGrid(canvas,board)
         gui.drawGoals(canvas,goals)
         gui.drawSquares(canvas,squares)
+        
+        predictions = Predictions(squares, goals,board)
+        predictions.BFS()
+        predictions.DFS()
         
         return board,squares,goals
     
@@ -69,6 +78,9 @@ class Grid():
         gui.drawGoals(canvas,goals)
         gui.drawSquares(canvas,squares)
         
+        predictions = Predictions(squares, goals,board)
+        predictions.BFS()
+        predictions.DFS()
         
         return board,squares,goals
     
@@ -91,6 +103,10 @@ class Grid():
         gui.drawGoals(canvas,goals)
         gui.drawSquares(canvas,squares)
         
+        predictions = Predictions(squares, goals,board)
+        predictions.BFS()
+        predictions.DFS()
+        
         
         return board,squares,goals
     
@@ -112,6 +128,9 @@ class Grid():
         gui.drawGoals(canvas,goals)
         gui.drawSquares(canvas,squares)
         
+        predictions = Predictions(squares, goals,board)
+        predictions.BFS()
+        predictions.DFS()
         
         return board,squares,goals
     
@@ -133,6 +152,10 @@ class Grid():
         gui.drawGoals(canvas,goals)
         gui.drawSquares(canvas,squares)
         
+        predictions = Predictions(squares, goals,board)
+        predictions.BFS()
+        predictions.DFS()
+        
         return board,squares,goals
     
     
@@ -152,5 +175,9 @@ class Grid():
         gui.drawGrid(canvas,board)
         gui.drawGoals(canvas,goals)
         gui.drawSquares(canvas,squares)
+        
+        predictions = Predictions(squares, goals,board)
+        predictions.BFS()
+        predictions.DFS()
         
         return board,squares,goals

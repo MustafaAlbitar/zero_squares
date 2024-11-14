@@ -2,6 +2,9 @@ from square import *
 from goal import *
 from gui import *
 from history import *
+from prediction import * 
+from collections import deque
+
 
 class Moving():
     def __init__(self,grid,squares,goals):
@@ -11,9 +14,6 @@ class Moving():
         self.gameOver = False
         self.win = False
         self.history = History()
-    
-    def storeCurrentState(self):
-        self.history.addToHistory(self.squares, self.goals)
     
     def cannotMove(self, square, dx, dy):
         nextRow, nextCol = square.row + dx, square.column + dy
@@ -127,8 +127,7 @@ class Moving():
                 self.goals.remove(goal)
                 
         self.squares = newSquares
-        self.history.addToHistory(self.squares, self.goals)
-        self.predictMove()
+        self.history.addToHistory(direction ,self.squares, self.goals)
         return self.squares,goalsToRemove
     
     
@@ -137,50 +136,3 @@ class Moving():
             return 'gameOver'
         if len(self.goals) == 0:
             return 'win'
-    
-    def predictMove(self):
-        directions = ['right', 'left', 'up', 'down']
-        move_map = {
-            'right': (0, 1),
-            'left': (0, -1),
-            'up': (-1, 0),
-            'down': (1, 0)
-        }
-        positionsAfterMove = []
-        
-        for direction in directions:
-            dx, dy = move_map[direction]
-            occupiedPositions = set()
-            newSquaresPredict = []
-            
-            sortedSquares = self.sortedSquares(direction)
-            
-            for square in sortedSquares:
-                newX, newY = square.row, square.column
-                lastValidX, lastValidY = newX, newY
-                
-                while self.canMove(newX + dx, newY + dy, direction) and not self.cannotMove(square, dx, dy):
-                    testX, testY = newX + dx, newY + dy
-                    
-                    if (testX, testY) in occupiedPositions:
-                        break
-                    else:
-                        lastValidX, lastValidY = newX, newY
-                        newX, newY = testX, testY
-                        
-                if (newX, newY) not in occupiedPositions:
-                    newSquaresPredict.append((newX, newY, square.color))
-                    occupiedPositions.add((newX, newY))
-                else:
-                    newX, newY = lastValidX, lastValidY
-                    break
-                    
-            positionsAfterMove.append({
-                'direction': direction,
-                'squares': newSquaresPredict,
-                'goals': [(g.row, g.column, g.color) for g in self.goals]
-            })
-        #print('predictions ',positionsAfterMove)
-        self.history.getUniquePredictions(positionsAfterMove)
-        
-        return positionsAfterMove

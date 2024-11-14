@@ -53,8 +53,8 @@ class Gui():
             print('Invalid level')
         
         self.move = Moving(board,squares,goals)
-        self.move.history.addToHistory(squares,goals)
-        self.move.predictMove()
+        direction = 'none'
+        self.move.history.addToHistory(direction,squares,goals)
         self.gameCanvas.focus_set()
         self.gameCanvas.bind('<Right>',lambda e: self.moveRight())
         self.gameCanvas.bind('<Left>' ,lambda e: self.moveLeft())
