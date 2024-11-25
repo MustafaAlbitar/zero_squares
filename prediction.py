@@ -9,16 +9,19 @@ class Predictions:
         self.graph = {}
         self.gameOver = False
         self.validState = True
+        self.reQueue = []
+        self.reVisited = set()
+        self.reGraph = {}
         
     def cloneState(self, squares, goals):
         squares_copy = [Square(square.row, square.column, square.color) for square in squares]
         goals_copy = [Goal(goal.row, goal.column, goal.color) for goal in goals]
         return squares_copy, goals_copy
     
-    def stateToKey(self, squares, goals, direction):
+    def stateToKey(self, squares, goals):
         squares_key = tuple(sorted((sq.row, sq.column, sq.color) for sq in squares))
         goals_key = tuple(sorted((g.row, g.column, g.color) for g in goals))
-        return (squares_key, goals_key, direction)
+        return (squares_key, goals_key)
     
     def cannotMove(self, square, dx, dy, squares):
         nextRow, nextCol = square.row + dx, square.column + dy
@@ -132,7 +135,7 @@ class Predictions:
     
     def BFS(self):
         squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
-        initialStateKey = self.stateToKey(squaresClone, goalsClone, 'none')
+        initialStateKey = self.stateToKey(squaresClone, goalsClone)
         
         queue = [(squaresClone, goalsClone, 'none', [])]
         visited = set()
@@ -141,7 +144,7 @@ class Predictions:
         
         while queue:
             currentSquares, currentGoals, lastDirection, path = queue.pop(0)
-            currentStateKey = self.stateToKey(currentSquares, currentGoals, lastDirection)
+            currentStateKey = self.stateToKey(currentSquares, currentGoals)
             
             if not currentGoals:
                 print(path)
@@ -157,7 +160,7 @@ class Predictions:
                 newSquares = [Square(row, col, color) for row, col, color in prediction['squares']]
                 newGoals = [Goal(row, col, color) for row, col, color in prediction['goals']]
                 newDirection = prediction['direction']
-                newStateKey = self.stateToKey(newSquares, newGoals, newDirection)
+                newStateKey = self.stateToKey(newSquares, newGoals)
                 
                 if newStateKey not in visited:
                     visited.add(newStateKey)
@@ -170,7 +173,7 @@ class Predictions:
     
     def DFS(self):
         squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
-        initialStateKey = self.stateToKey(squaresClone, goalsClone, 'none')
+        initialStateKey = self.stateToKey(squaresClone, goalsClone)
         
         queue = [(squaresClone, goalsClone, 'none', [])]
         visited = set()
@@ -179,7 +182,7 @@ class Predictions:
         
         while queue:
             currentSquares, currentGoals, lastDirection, path = queue.pop()
-            currentStateKey = self.stateToKey(currentSquares, currentGoals, lastDirection)
+            currentStateKey = self.stateToKey(currentSquares, currentGoals)
             
             if not currentGoals:
                 print(path)
@@ -195,7 +198,7 @@ class Predictions:
                 newSquares = [Square(row, col, color) for row, col, color in prediction['squares']]
                 newGoals = [Goal(row, col, color) for row, col, color in prediction['goals']]
                 newDirection = prediction['direction']
-                newStateKey = self.stateToKey(newSquares, newGoals, newDirection)
+                newStateKey = self.stateToKey(newSquares, newGoals)
                 
                 if newStateKey not in visited:
                     visited.add(newStateKey)
@@ -204,4 +207,42 @@ class Predictions:
                     queue.append((newSquares, newGoals, newDirection, path + [newDirection]))
         
         return None
+    
+    
+    def printRecursiveDFS(self):
+        squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
+        
+        DFS = self.recursiveDFS(squaresClone,goalsClone,'none',[])
+        #print(self.reGraph)
+    
+    
+    def recursiveDFS(self,newSquares,newGoals,newDirection,path):
+        
+        self.reQueue.append((newSquares,newGoals,newDirection,path))
+        stateKey = self.stateToKey(newSquares, newGoals)
+        self.reVisited.add(stateKey)
+        
+        while self.reQueue:
+            currentSquares, currentGoals, lastDirection, path = self.reQueue.pop()
+            currentStateKey = self.stateToKey(currentSquares, currentGoals)
+            
+            if not currentGoals:
+                print(path)
+                return path
+            
+            if currentStateKey not in self.reGraph:
+                self.reGraph[currentStateKey] = []
+            
+            predictions = self.predictMove(currentSquares, currentGoals)
+            
+            for prediction in predictions:
+                newSquares = [Square(row, col, color) for row, col, color in prediction['squares']]
+                newGoals = [Goal(row, col, color) for row, col, color in prediction['goals']]
+                newDirection = prediction['direction']
+                newStateKey = self.stateToKey(newSquares, newGoals)
+                
+                if newStateKey not in self.reVisited:
+                    self.reVisited.add(newStateKey)
+                    self.reGraph[currentStateKey].append(newStateKey)
+                    self.recursiveDFS(newSquares,newGoals,newDirection,path + [newDirection])
     

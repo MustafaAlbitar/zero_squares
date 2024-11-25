@@ -32,6 +32,7 @@ class Grid():
         predictions = Predictions(squares, goals,board)
         predictions.BFS()
         predictions.DFS()
+        predictions.printRecursiveDFS()
         
         return board,squares,goals
     
@@ -56,6 +57,7 @@ class Grid():
         predictions = Predictions(squares, goals,board)
         predictions.BFS()
         predictions.DFS()
+        predictions.printRecursiveDFS()
         
         return board,squares,goals
     
@@ -81,6 +83,7 @@ class Grid():
         predictions = Predictions(squares, goals,board)
         predictions.BFS()
         predictions.DFS()
+        predictions.printRecursiveDFS()
         
         return board,squares,goals
     
@@ -106,7 +109,7 @@ class Grid():
         predictions = Predictions(squares, goals,board)
         predictions.BFS()
         predictions.DFS()
-        
+        #predictions.printRecursiveDFS()
         
         return board,squares,goals
     
@@ -131,6 +134,7 @@ class Grid():
         predictions = Predictions(squares, goals,board)
         predictions.BFS()
         predictions.DFS()
+        predictions.printRecursiveDFS()
         
         return board,squares,goals
     
@@ -155,6 +159,7 @@ class Grid():
         predictions = Predictions(squares, goals,board)
         predictions.BFS()
         predictions.DFS()
+        predictions.printRecursiveDFS()
         
         return board,squares,goals
     
@@ -179,5 +184,6 @@ class Grid():
         predictions = Predictions(squares, goals,board)
         predictions.BFS()
         predictions.DFS()
+        predictions.printRecursiveDFS()
         
         return board,squares,goals
