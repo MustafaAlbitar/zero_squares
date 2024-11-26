@@ -1,5 +1,6 @@
 from square import *
 from goal import *
+import heapq
 
 class Predictions:
     def __init__(self, squares, goals, grid):
@@ -70,6 +71,7 @@ class Predictions:
         grayGoals = []
         newSquares = []
         goalsToRemove = []
+        steps = 0 
         
         sortedSquares = self.sortedSquares(squaresCopy, direction)
         
@@ -83,6 +85,7 @@ class Predictions:
                 lastValidX, lastValidY = newX, newY
                 newX += dx
                 newY += dy
+                steps +=1
                 
                 if (newX, newY) in occupiedPositions:
                     newX, newY = lastValidX, lastValidY
@@ -113,19 +116,20 @@ class Predictions:
             if goal in goalsCopy:
                 goalsCopy.remove(goal)
                 
-        return newSquares, goalsCopy
+        return newSquares, goalsCopy, steps
     
     def predictMove(self, squares, goals):
         directions = ['right', 'left', 'up', 'down']
         positionsAfterMove = []
         
         for direction in directions:
-            newSquares, newGoals = self.simulateMove(squares, goals, direction)
+            newSquares, newGoals ,steps = self.simulateMove(squares, goals, direction)
             if self.validState:
                 positionsAfterMove.append({
                     'direction': direction,
                     'squares': [(sq.row, sq.column, sq.color) for sq in newSquares],
-                    'goals': [(g.row, g.column, g.color) for g in newGoals]
+                    'goals': [(g.row, g.column, g.color) for g in newGoals],
+                    'cost': steps
                 })
             else:
                 self.validState = True
@@ -245,4 +249,47 @@ class Predictions:
                     self.reVisited.add(newStateKey)
                     self.reGraph[currentStateKey].append(newStateKey)
                     self.recursiveDFS(newSquares,newGoals,newDirection,path + [newDirection])
+        
+        return None
     
+    
+    def UCS(self):
+        squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
+        initialStateKey = self.stateToKey(squaresClone, goalsClone)
+        priorityQueue = []
+        heapq.heappush(priorityQueue, (0, initialStateKey, 'none', []))
+        
+        costs = {initialStateKey: 0}
+        self.graph = {}
+        
+        while priorityQueue:
+            cost, currentStateKey, lastDirection, path = heapq.heappop(priorityQueue)
+            squaresKey, goalsKey = currentStateKey
+            
+            currentSquares = [Square(row, col, color) for row, col, color in squaresKey]
+            currentGoals = [Goal(row, col, color) for row, col, color in goalsKey]
+            
+            if not currentGoals:
+                print(path)
+                return path
+            
+            if currentStateKey not in self.graph:
+                self.graph[currentStateKey] = []
+            
+            predictions = self.predictMove(currentSquares, currentGoals)
+            
+            for prediction in predictions:
+                newSquaresKey = tuple(sorted((row, col, color) for row, col, color in prediction['squares']))
+                newGoalsKey = tuple(sorted((row, col, color) for row, col, color in prediction['goals']))
+                newDirection = prediction['direction']
+                newCost = prediction['cost']
+                newStateKey = (newSquaresKey, newGoalsKey)
+                
+                totalCost = cost + newCost
+                
+                if newStateKey not in costs or totalCost < costs[newStateKey]:
+                    costs[newStateKey] = totalCost
+                    self.graph[currentStateKey].append((newStateKey, newDirection))
+                    heapq.heappush(priorityQueue, (totalCost, newStateKey, newDirection, path + [newDirection]))
+        
+        return None
