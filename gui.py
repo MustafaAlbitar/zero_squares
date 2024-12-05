@@ -17,7 +17,7 @@ class Gui():
         app.title('Zero Squares Gaame')
         app.geometry('720x720')
         
-        self.selectedLevel = ctk.CTkComboBox(app, values=[f'level {i+1}' for i in range(7)])
+        self.selectedLevel = ctk.CTkComboBox(app, values=[f'level {i+1}' for i in range(10)])
         self.selectedLevel.pack(pady = 20)
         
         self.gameCanvas = ctk.CTkCanvas(app , width = 820 , height = 580 )
@@ -49,6 +49,12 @@ class Gui():
             board , squares , goals = grid.levelSix(self.gameCanvas)
         elif selectedLevel == 'level 7':
             board , squares , goals = grid.levelSeven(self.gameCanvas)
+        elif selectedLevel == 'level 8':
+            board , squares , goals = grid.levelEghit(self.gameCanvas)
+        elif selectedLevel == 'level 9':
+            board , squares , goals = grid.levelNine(self.gameCanvas)
+        elif selectedLevel == 'level 10':
+            board , squares , goals = grid.levelTen(self.gameCanvas)
         else:
             print('Invalid level')
         

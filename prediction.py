@@ -1,6 +1,7 @@
 from square import *
 from goal import *
 import heapq
+from collections import deque
 
 class Predictions:
     def __init__(self, squares, goals, grid):
@@ -151,7 +152,10 @@ class Predictions:
             currentStateKey = self.stateToKey(currentSquares, currentGoals)
             
             if not currentGoals:
-                print(path)
+                print('BFS')
+                print('path length',len(path))
+                print('path :',path)
+                print('visited states :' , len(self.graph))
                 #print(self.graph)
                 return path
             
@@ -189,7 +193,10 @@ class Predictions:
             currentStateKey = self.stateToKey(currentSquares, currentGoals)
             
             if not currentGoals:
-                print(path)
+                print('DFS')
+                print('path length',len(path))
+                print('path :',path)
+                print('visited states :' , len(self.graph))
                 #print(self.graph)
                 return path
             
@@ -231,7 +238,10 @@ class Predictions:
             currentStateKey = self.stateToKey(currentSquares, currentGoals)
             
             if not currentGoals:
-                print(path)
+                print('Recursive DFS')
+                print('path length',len(path))
+                print('path :',path)
+                print('visited states :' , len(self.reGraph))
                 return path
             
             if currentStateKey not in self.reGraph:
@@ -270,7 +280,11 @@ class Predictions:
             currentGoals = [Goal(row, col, color) for row, col, color in goalsKey]
             
             if not currentGoals:
-                print(path)
+                print('UCS')
+                print('path length',len(path))
+                print('path :',path)
+                print('visited states :' ,len(self.graph))
+                print('cost :' , cost)
                 return path
             
             if currentStateKey not in self.graph:
@@ -292,4 +306,200 @@ class Predictions:
                     self.graph[currentStateKey].append((newStateKey, newDirection))
                     heapq.heappush(priorityQueue, (totalCost, newStateKey, newDirection, path + [newDirection]))
         
+        return None
+    
+    def manhattanDistance(self, square, goals):
+        distances = [
+            abs(square.row - goal.row) + abs(square.column - goal.column)
+            for goal in goals if goal.color == square.color
+        ]
+        return min(distances) if distances else float('inf')
+    
+    def simpleHillClimbing(self):
+        squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
+        currentSquares, currentGoals = squaresClone, goalsClone
+        path = []
+        
+        while currentGoals:
+            predictions = self.predictMove(currentSquares, currentGoals)
+            foundBetterMove = False
+            
+            for prediction in predictions:
+                newSquares = [Square(row, col, color) for row, col, color in prediction['squares']]
+                newGoals = [Goal(row, col, color) for row, col, color in prediction['goals']]
+                heuristic = sum(self.manhattanDistance(square, newGoals) for square in newSquares)
+                
+                if heuristic < sum(self.manhattanDistance(square, currentGoals) for square in currentSquares):
+                    currentSquares = newSquares
+                    currentGoals = newGoals
+                    path.append(prediction['direction'])
+                    foundBetterMove = True
+                    break
+                
+            if not foundBetterMove:
+                print("No better moves available. Stopping Simple Hill Climbing.")
+                break
+        
+        print('path length',len(path))
+        print('path :' , path)
+        return path
+    
+    
+    def steepestAscentHillClimbing(self):
+        squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
+        currentSquares, currentGoals = squaresClone, goalsClone
+        path = []
+        
+        while currentGoals:
+            predictions = self.predictMove(currentSquares, currentGoals)
+            bestMove = None
+            bestHeuristic = float('inf')
+            
+            for prediction in predictions:
+                newSquares = [Square(row, col, color) for row, col, color in prediction['squares']]
+                newGoals = [Goal(row, col, color) for row, col, color in prediction['goals']]
+                heuristic = sum(self.manhattanDistance(square, newGoals) for square in newSquares)
+                
+                if heuristic < bestHeuristic:
+                    bestHeuristic = heuristic
+                    bestMove = prediction
+                    
+            if bestMove is None or bestHeuristic >= sum(self.manhattanDistance(square, currentGoals) for square in currentSquares):
+                print("No better moves available. Stopping Steepest Ascent Hill Climbing.")
+                break
+            
+            currentSquares = [Square(row, col, color) for row, col, color in bestMove['squares']]
+            currentGoals = [Goal(row, col, color) for row, col, color in bestMove['goals']]
+            path.append(bestMove['direction'])
+            
+        print('path length',len(path))
+        print('Path :', path)
+        return path
+    
+    def AStar(self):
+        squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
+        initialStateKey = self.stateToKey(squaresClone, goalsClone)
+        priorityQueue = []
+        heapq.heappush(priorityQueue, (0, 0, initialStateKey, 'none', []))
+        
+        costs = {initialStateKey: 0}
+        self.graph = {}
+        
+        while priorityQueue:
+            _, cost, currentStateKey, lastDirection, path = heapq.heappop(priorityQueue)
+            squaresKey, goalsKey = currentStateKey
+            
+            currentSquares = [Square(row, col, color) for row, col, color in squaresKey]
+            currentGoals = [Goal(row, col, color) for row, col, color in goalsKey]
+            
+            if not currentGoals:
+                print('A*')
+                print('path length',len(path))
+                print('path :',path)
+                print('visited states :' , len(self.graph))
+                print('cost :',cost)
+                return path
+            
+            if currentStateKey not in self.graph:
+                self.graph[currentStateKey] = []
+                
+            predictions = self.predictMove(currentSquares, currentGoals)
+            
+            for prediction in predictions:
+                newSquaresKey = tuple(sorted((row, col, color) for row, col, color in prediction['squares']))
+                newGoalsKey = tuple(sorted((row, col, color) for row, col, color in prediction['goals']))
+                newDirection = prediction['direction']
+                newCost = prediction['cost']
+                newStateKey = (newSquaresKey, newGoalsKey)
+                
+                heuristic = sum(self.manhattanDistance(square, currentGoals)
+                    for square in [Square(row, col, color) for row, col, color in prediction['squares']])
+                totalCost = cost + newCost + heuristic
+                
+                if newStateKey not in costs or totalCost < costs[newStateKey]:
+                    costs[newStateKey] = totalCost
+                    self.graph[currentStateKey].append((newStateKey, newDirection))
+                    heapq.heappush(priorityQueue, (totalCost, cost + newCost, newStateKey, newDirection, path + [newDirection]))
+                    
+        return None
+    
+    def BFSHeuristic(self,grid, start, goal):
+        rows, cols = len(grid), len(grid[0])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        queue = deque([(start[0], start[1], 0)])
+        visited = set()
+        visited.add((start[0], start[1]))
+        
+        while queue:
+            x, y, dist = queue.popleft()
+            
+            if (x, y) == (goal[0], goal[1]):
+                return dist
+            
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < rows and 0 <= ny < cols and grid[nx][ny] != 'B' and grid[nx][ny] != 'F' and (nx, ny) not in visited:
+                    visited.add((nx, ny))
+                    queue.append((nx, ny, dist + 1))
+        
+        return float('inf')
+
+
+    def advancedHeuristic(self,grid, squares, goals):
+        total_cost = 0
+        for square in squares:
+            best_path_cost = float('inf')
+            for goal in goals:
+                if square.color == goal.color:
+                    path_cost = self.BFSHeuristic(grid, (square.row, square.column), (goal.row, goal.column))
+                    best_path_cost = min(best_path_cost, path_cost)
+            total_cost += best_path_cost
+        return total_cost
+    
+    
+    def advancedAStar(self):
+        squaresClone, goalsClone = self.cloneState(self.initialSquares, self.initialGoals)
+        initialStateKey = self.stateToKey(squaresClone, goalsClone)
+        priorityQueue = []
+        heapq.heappush(priorityQueue, (0, 0, initialStateKey, 'none', []))
+        
+        costs = {initialStateKey: 0}
+        self.graph = {}
+        
+        while priorityQueue:
+            _, cost, currentStateKey, lastDirection, path = heapq.heappop(priorityQueue)
+            squaresKey, goalsKey = currentStateKey
+            
+            currentSquares = [Square(row, col, color) for row, col, color in squaresKey]
+            currentGoals = [Goal(row, col, color) for row, col, color in goalsKey]
+            
+            if not currentGoals:
+                print('advanced_A*')
+                print('path length',len(path))
+                print('path :',path)
+                print('visited states :' , len(self.graph))
+                print('cost :',cost)
+                return path
+            
+            if currentStateKey not in self.graph:
+                self.graph[currentStateKey] = []
+                
+            predictions = self.predictMove(currentSquares, currentGoals)
+            
+            for prediction in predictions:
+                newSquaresKey = tuple(sorted((row, col, color) for row, col, color in prediction['squares']))
+                newGoalsKey = tuple(sorted((row, col, color) for row, col, color in prediction['goals']))
+                newDirection = prediction['direction']
+                newCost = prediction['cost']
+                newStateKey = (newSquaresKey, newGoalsKey)
+                
+                heuristic = sum(self.advancedHeuristic(self.grid, self.initialSquares, self.initialGoals)
+                    for square in [Square(row, col, color) for row, col, color in prediction['squares']])
+                totalCost = cost + newCost + heuristic
+                
+                if newStateKey not in costs or totalCost < costs[newStateKey]:
+                    costs[newStateKey] = totalCost
+                    self.graph[currentStateKey].append((newStateKey, newDirection))
+                    heapq.heappush(priorityQueue, (totalCost, cost + newCost, newStateKey, newDirection, path + [newDirection]))
+                    
         return None

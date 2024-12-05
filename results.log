@@ -1,0 +1,115 @@
+level 10
+
+BFS
+path length 44
+path : ['up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'left', 'up', 'right', 'down', 'left', 'up', 'right', 'up', 'right', 'up', 'right', 'down', 'right', 'down', 'right', 'down', 'right', 'down', 'left', 'down', 'left', 'up', 'right', 'up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'right', 'up', 'right']
+visited states : 297
+Memory usage for <lambda>: Current = 139.18 KB, Peak = 151.31 KB
+BFS took 0.0726 seconds to execute.
+
+DFS
+path length 77
+path : ['down', 'left', 'up', 'right', 'down', 'right', 'up', 'left', 'down', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'left', 'down', 'right', 'down', 'right', 'up', 'left', 'down', 'up', 'right', 'up', 'left', 'up', 'right', 'up', 'right', 'down', 'left', 'down', 'left', 'down', 'right', 'down', 'left', 'up', 'right', 'down', 'right', 'down', 'left', 'up', 'right', 'up', 'right', 'up', 'left', 'up', 'right', 'down', 'right', 'down', 'right', 'down', 'left', 'down', 'left', 'up', 'right', 'up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'right', 'up', 'right']   
+visited states : 146
+Memory usage for <lambda>: Current = 18.62 KB, Peak = 51.11 KB
+DFS took 0.0433 seconds to execute.
+
+Recursive DFS
+path length 114
+path : ['up', 'right', 'left', 'up', 'right', 'left', 'up', 'right', 'left', 'down', 'right', 'left', 'up', 'right', 'up', 'right', 'up', 'right', 'down', 'right', 'left', 'down', 'right', 'left', 'up', 'down', 'right', 'left', 'down', 'right', 'up', 'down', 'right', 'up', 'right', 'up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'right', 'left', 'up', 'right', 'up', 'down', 'right', 'left', 'left', 'up', 'right', 'up', 'right', 'up', 'right', 'down', 'right', 'left', 'down', 'right', 'left', 'up', 'down', 'right', 'left', 'up', 'down', 'right', 'up', 'down', 'right', 'left', 'up', 'right', 'up', 'down', 'right', 'up', 'down', 'left', 'up', 'right', 'up', 'right', 'up', 'right', 'down', 'right', 'up', 'down', 'right', 'down', 'left', 'up', 'down', 'left', 'up', 'right', 'up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'right', 'up', 'right']
+visited states : 272
+Memory usage for <lambda>: Current = 318.31 KB, Peak = 582.66 KB
+Recursive DFS took 0.1451 seconds to execute.
+
+UCS
+path length 44
+path : ['up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'left', 'up', 'right', 'down', 'left', 'up', 'right', 'up', 'right', 'down', 'right', 'up', 'right', 'down', 'right', 'down', 'right', 'down', 'left', 'down', 'left', 'up', 'right', 'up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'right', 'up', 'right']
+visited states : 298
+cost : 107
+Memory usage for <lambda>: Current = 38.48 KB, Peak = 50.38 KB
+UCS took 0.0709 seconds to execute.
+
+No better moves available. Stopping Simple Hill Climbing.
+path length 2
+path : ['up', 'right']
+Memory usage for <lambda>: Current = 0.00 KB, Peak = 2.92 KB
+Hill Climbing took 0.0010 seconds.
+
+No better moves available. Stopping Steepest Ascent Hill Climbing.
+path length 2
+Path : ['up', 'right']
+Memory usage for <lambda>: Current = 0.00 KB, Peak = 3.32 KB
+Hill Climbing took 0.0021 seconds.
+
+A*
+path length 44
+path : ['up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'left', 'up', 'right', 'down', 'left', 'up', 'right', 'up', 'right', 'down', 'right', 'up', 'right', 'down', 'right', 'down', 'right', 'down', 'left', 'down', 'left', 'up', 'right', 'up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'right', 'up', 'right']
+visited states : 294
+cost : 107
+Memory usage for <lambda>: Current = 28.85 KB, Peak = 40.74 KB
+
+A* Search took 0.0836 seconds.
+advanced_A*
+path length 44
+path : ['up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'left', 'up', 'right', 'down', 'left', 'up', 'right', 'up', 'right', 'down', 'right', 'up', 'right', 'down', 'right', 'down', 'right', 'down', 'left', 'down', 'left', 'up', 'right', 'up', 'left', 'up', 'left', 'up', 'left', 'down', 'left', 'down', 'right', 'up', 'right']
+visited states : 297
+cost : 107
+Memory usage for <lambda>: Current = 29.77 KB, Peak = 45.09 KB
+advanced A* Search took 1.6713 seconds.
+
+
+level 20
+
+BFS
+path length 13
+path : ['left', 'down', 'right', 'up', 'left', 'left', 'up', 'left', 'down', 'left', 'up', 'right', 'down']
+visited states : 3025
+Memory usage for <lambda>: Current = 5412.02 KB, Peak = 6639.94 KB
+BFS took 1.5403 seconds to execute.
+
+DFS
+path length 19
+path : ['down', 'up', 'left', 'down', 'left', 'down', 'right', 'down', 'left', 'up', 'right', 'down', 'left', 'up', 'left', 'down', 'up', 'right', 'down']
+visited states : 21
+Memory usage for <lambda>: Current = 2.22 KB, Peak = 20.40 KB
+DFS took 0.0133 seconds to execute.
+
+Recursive DFS
+maximum recursion depth exceeded
+
+UCS
+path length 14
+path : ['down', 'up', 'left', 'up', 'left', 'right', 'up', 'left', 'down', 'left', 'up', 'right', 'down', 'right']
+visited states : 1297
+cost : 39
+Memory usage for <lambda>: Current = 1474.91 KB, Peak = 1634.31 KB
+UCS took 0.5895 seconds to execute.
+
+No better moves available. Stopping Simple Hill Climbing.
+path length 3
+path : ['up', 'down', 'up']
+Memory usage for <lambda>: Current = 2.30 KB, Peak = 7.75 KB
+Hill Climbing took 0.0022 seconds.
+
+No better moves available. Stopping Steepest Ascent Hill Climbing.
+path length 2
+Path : ['down', 'up']
+Memory usage for <lambda>: Current = 0.00 KB, Peak = 5.65 KB
+Hill Climbing took 0.0024 seconds.
+
+A*
+path length 14
+path : ['down', 'up', 'left', 'up', 'left', 'right', 'up', 'left', 'down', 'left', 'up', 'right', 'down', 'right']
+visited states : 282
+cost : 39
+Memory usage for <lambda>: Current = 158.04 KB, Peak = 200.08 KB
+
+A* Search took 0.1356 seconds.
+advanced_A*
+path length 14
+path : ['down', 'up', 'left', 'up', 'left', 'right', 'up', 'left', 'down', 'left', 'up', 'right', 'down', 'right']
+visited states : 36
+cost : 39
+Memory usage for <lambda>: Current = 2.85 KB, Peak = 11.09 KB
+advanced A* Search took 0.3374 seconds.
+
