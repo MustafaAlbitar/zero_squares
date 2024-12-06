@@ -75,7 +75,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -142,7 +142,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -210,7 +210,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -278,7 +278,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -345,7 +345,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -412,7 +412,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -479,7 +479,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -547,7 +547,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -614,7 +614,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())
@@ -638,11 +638,11 @@ class Grid():
             ['B','B','B','B','B','B','B','B','F','B','B','B','B','B','B','B'],
         ])
         squares = [Square(2,1,'red'),Square(3,2,'pink'),Square(2,2,'blue'),Square(2,3,'green'),Square(3,1,'yellow')]
-        goals = [Goal(5,8,'blue'),Goal(1,10,'yellow'),Goal(1,7,'pink'),Goal(4,4,'gray'),Goal(1,14,'green')]
+        goals = [Goal(4,8,'blue'),Goal(1,10,'yellow'),Goal(1,7,'pink'),Goal(4,4,'gray'),Goal(1,14,'green')]
         gui = Gui()
-        # gui.drawGrid(canvas,board)
-        # gui.drawGoals(canvas,goals)
-        # gui.drawSquares(canvas,squares)
+        gui.drawGrid(canvas,board)
+        gui.drawGoals(canvas,goals)
+        gui.drawSquares(canvas,squares)
         
         predictions = Predictions(squares, goals,board)
         # Measure BFS
@@ -679,7 +679,7 @@ class Grid():
         measureMemory(lambda: predictions.steepestAscentHillClimbing())
         end_time = time.time()
         print(f"Hill Climbing took {end_time - start_time:.4f} seconds.")
-
+        
         # A* Search
         start_time = time.time()
         measureMemory(lambda: predictions.AStar())

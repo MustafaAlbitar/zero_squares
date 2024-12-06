@@ -2,6 +2,9 @@ from square import *
 from goal import *
 import heapq
 from collections import deque
+import sys
+
+sys.setrecursionlimit(20000)
 
 class Predictions:
     def __init__(self, squares, goals, grid):
